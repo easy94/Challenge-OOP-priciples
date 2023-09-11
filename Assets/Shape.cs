@@ -4,46 +4,74 @@ using TMPro;
 using UnityEngine;
 using Unity.UI;
 using UnityEngine.UI;
+using UnityEditor.Experimental.GraphView;
 
 public class Shape : MonoBehaviour
 {
-    public Button Button;
+    public Button button;
+    public Camera GameCamera;
 
+   private Shape m_Selected;
 
-    protected int m_size;
-    protected int size                                          //encapsulation example
+    protected float m_size = 1;
+    public float size
     {
         get { return m_size; }
         set
         {
-            if (m_size < 1 && m_size > 10) size = m_size;
+            if (m_size >= 1f && m_size <= 5f)
+            {
+                m_size = value;
+            }
             else print("size too small or too big");
         }
     }
+
+
     protected string m_name;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Mouse0))
+        {
+            var ray = GameCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit))
+            {
+                m_Selected = hit.collider.GetComponent<Shape>();
+            }
+
+        }
 
     }
+
+
 
     protected virtual void printName()
     {
 
     }
 
+    public void OnButtonClick() {
+        m_Selected.size += 1f;
+    }
+
     private void OnMouseDown()
     {
-        if (gameObject.GetComponent<Transform>() != null)                   //abstraction example
-        {
-            printName();
-        }
+        changeButtonText();
+        printName();
+    }
+
+    void changeButtonText()
+    {
+        button.GetComponentInChildren <Text>().text = "Selected: " + name;
     }
 }

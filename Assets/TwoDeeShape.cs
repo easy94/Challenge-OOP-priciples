@@ -14,7 +14,7 @@ public class TwoDeeShape : Shape
     // Update is called once per frame
     void Update()
     {
-
+        transform.localScale = new(m_size, m_size, m_size);
     }
     protected override void printName()
     {
